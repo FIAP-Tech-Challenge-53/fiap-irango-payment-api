@@ -13,7 +13,7 @@ export class Environment {
   }
 
   static get PORT () {
-    return process.env.PORT || 3000
+    return process.env.PORT || 3002
   }
 
   static get SENTRY_DSN () {
@@ -37,7 +37,7 @@ export class Environment {
   }
 
   static get DB_DATABASE () {
-    return process.env.DB_DATABASE || 'irango'
+    return process.env.DB_DATABASE || 'irango_payment'
   }
 
   static get DB_CONNECTION_LIMIT (): number {
@@ -48,23 +48,7 @@ export class Environment {
     return Number(process.env.DB_CONNECTION_TIMEOUT) || 30000
   }
 
-  static get REDIS_HOSTNAME () {
-    return process.env.REDIS_HOSTNAME || 'localhost'
-  }
-
-  static get REDIS_PORT (): number {
-    return Number(process.env.REDIS_PORT) || 6379
-  }
-
-  static get REDIS_DB (): number {
-    return Number(process.env.REDIS_DB) || 0
-  }
-
-  static get REDIS_ENABLED (): boolean {
-    return process.env.REDIS_ENABLED === 'true'
-  }
-
-  static get CACHE_ENABLED (): boolean {
-    return process.env.CACHE_ENABLED === 'true'
+  static get SERVICE_IRANGO_ORDER_API () {
+    return process.env.SERVICE_IRANGO_ORDER_API || 'http://localhost:3001'
   }
 }

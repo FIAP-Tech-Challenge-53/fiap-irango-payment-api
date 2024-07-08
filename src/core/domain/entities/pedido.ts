@@ -1,48 +1,31 @@
-import PedidoUpdateDto from '@/core/domain/dto/input/pedido-update.dto'
-import Consumidor from '@/core/domain/entities/consumidor'
-import ItemPedido from '@/core/domain/entities/item-pedido'
-import { PedidoStatusEnum } from '@/core/domain/enums/pedido-status.enum'
 
 export default class Pedido {
   readonly id: number
   consumidorId?: string
-  consumidor?: Consumidor
-  itens: ItemPedido[]
   total: number
-  status: PedidoStatusEnum
-  gatewayPagamentoId?: string
-  createdAt?: Date
-  updatedAt?: Date
+  pagamentoId?: string
+  createdAt: Date
+  updatedAt: Date
 
   public constructor (params?: Partial<Pedido>) {
     Object.assign(this, params)
   }
 
   static create (
-    consumidor: Consumidor | undefined,
-    itens: ItemPedido[],
-    status: PedidoStatusEnum,
+    id: number,
+    consumidorId: string | undefined,
+    total: number,
+    createdAt: Date,
+    updatedAt: Date,
   ): Pedido {
-    const total = itens.reduce((acc, item) => {
-      return acc + item.preco
-    }, 0)
-
-    const pedido = new Pedido({
-      consumidor,
-      consumidorId: consumidor?.id,
-      itens,
+    const pagamento = new Pedido({
+      id,
+      consumidorId,
       total,
-      status,
+      createdAt,
+      updatedAt
     })
 
-    return pedido
-  }
-
-  update (input: PedidoUpdateDto) {
-    this.status = input.status
-  }
-
-  recebido () {
-    this.status = PedidoStatusEnum.RECEBIDO
+    return pagamento
   }
 }
