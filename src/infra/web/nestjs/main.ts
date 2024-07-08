@@ -28,8 +28,8 @@ const configureSentry = (app: INestApplication) => {
 
 const configureSwagger = (app: INestApplication) => {
   const swaggerOptions = new DocumentBuilder()
-    .setTitle('iRango API')
-    .setDescription('iRango API documentation')
+    .setTitle('iRango Payment API')
+    .setDescription('iRango Payment API documentation')
     .setVersion('0.0.1')
     // .addBearerAuth(undefined, 'Mobile')
     .build()
