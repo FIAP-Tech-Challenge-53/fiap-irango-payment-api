@@ -5,11 +5,8 @@ import { Injectable } from '@nestjs/common'
 import { fakerPT_BR as faker } from '@faker-js/faker'
 import { DataSource, ObjectLiteral, Repository } from 'typeorm'
 
-import { PedidoStatusEnum } from '@/core/domain/enums/pedido-status.enum'
-import { ProdutoCategoriaEnum } from '@/core/domain/enums/produto-categoria.enum'
-import { Consumidor } from '@/infra/persistence/typeorm/entities/consumidor'
 import { Pedido } from '@/infra/persistence/typeorm/entities/pedido'
-import { Produto } from '@/infra/persistence/typeorm/entities/produto'
+import Pagamento from '@/core/domain/entities/pagamento'
 
 type IConstructable<T> = new () => T
 
@@ -62,70 +59,32 @@ export default class FactoryUtils {
 
   constructor (private dataSource: DataSource) {
     this.factories = {
-      consumidor: this.consumidorFactory(),
-      produto: this.produtoFactory(),
+      pagamento: this.pagamentoFactory(),
       pedido: this.pedidoFactory()
     }
   }
 
-  consumidorFactory = (): Factory<Consumidor> => {
-    return new Factory(Consumidor, this.dataSource)
+  pagamentoFactory = (): Factory<Pagamento> => {
+    return new Factory(Pagamento, this.dataSource)
       .sequence('id', () => faker.string.uuid())
-      .sequence('email', () => faker.internet.email())
-      .sequence('nome', () => faker.person.firstName())
-      .sequence('cpf', () => faker.string.numeric(11))
-  }
-
-  produtoFactory = (): Factory<Produto> => {
-    return new Factory(Produto, this.dataSource)
-      .sequence('id', () => faker.string.uuid())
-      .sequence('nome', () => faker.commerce.productName())
-      .sequence('imagemUrl', () => faker.image.url())
-      .sequence('descricao', () => faker.lorem.paragraph())
-      .sequence('preco', () => faker.number.float({ min: 0.01, max: 100, precision: 2 }))
-      .sequence('categoria', () => faker.helpers.enumValue(ProdutoCategoriaEnum))
-      .sequence('ingredientes', async () => {
-        const ingredienteFactory = () => {
-          return {
-            id: faker.string.uuid(),
-            nome: faker.commerce.productName(),
-            imagemUrl: faker.image.url(),
-            preco: faker.number.float({ min: 0.01, max: 50, precision: 2 })
-          }
-        }
-        const count = faker.number.int({ min: 0, max: 5 })
-        return Array(count).fill(1).map(ingredienteFactory)
-      })
+      .sequence('pedidoId', () => faker.string.uuid())
+      .sequence('valor', () => faker.number.float({ min: 0.01, max: 100, precision: 2 }))
+      .sequence('status', () => faker.lorem.paragraph())
   }
 
   pedidoFactory = (): Factory<Pedido> => {
     return new Factory(Pedido, this.dataSource)
       .sequence('id', () => faker.number.int({ min: 1, max: 999999 }))
-      .sequence('status', () => faker.helpers.enumValue(PedidoStatusEnum))
+      .sequence('consumidorId', () => faker.string.uuid())
       .sequence('total', () => faker.number.float({ min: 0.01, max: 100, precision: 2 }))
-      .sequence('consumidor', async () => this.consumidor())
-      .sequence('itens', async () => {
-        const itensFactory = async () => {
-          const produto = await this.produto()
-          return {
-            id: faker.string.uuid(),
-            produto,
-            produtoId: produto.id,
-            preco: produto.preco,
-            ingredientesRemovidos: faker.helpers.arrayElements(produto.ingredientes, faker.number.int({ min: 0, max: produto.ingredientes.length }))
-          }
-        }
-        const count = faker.number.int({ min: 0, max: 5 })
-        return Promise.all(Array(count).fill(1).map(itensFactory))
-      })
+      .sequence('pagamentoId', async () => faker.string.uuid())
+      .sequence('createdAt', () => new Date())
+      .sequence('updatedAt', () => new Date())
+
   }
 
-  consumidor = async (data?: Partial<Consumidor>) => {
-    return this.factories.consumidor.create(data)
-  }
-
-  produto = async (data?: Partial<Produto>) => {
-    return this.factories.produto.create(data)
+  pagamento = async (data?: Partial<Pagamento>) => {
+    return this.factories.pagamento.create(data)
   }
 
   pedido = async (data?: Partial<Pedido>) => {
