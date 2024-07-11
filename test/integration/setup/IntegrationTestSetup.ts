@@ -13,9 +13,6 @@ import FactoryUtils from '@/test/integration/setup/utils/FactoryUtils'
 import { ServerUtils } from '@/test/integration/setup/utils/ServerUtils'
 import { TestDatabaseUtils } from '@/test/integration/setup/utils/TestDatabaseUtils'
 
-import dotenv from 'dotenv'
-
-
 export interface ITestSetup {
   app: INestApplication
   module: TestingModule
@@ -25,9 +22,6 @@ export interface ITestSetup {
 }
 
 const buildNestApp = async () => {
-
-dotenv.config()
-
   const module = await Test.createTestingModule({
     imports: [
       ...appModules,

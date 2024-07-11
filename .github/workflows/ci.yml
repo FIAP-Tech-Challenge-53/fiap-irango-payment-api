@@ -62,12 +62,12 @@ jobs:
       - name: Test integration
         run: npm run test:integration --bail
         
-      - name: Notify CI process
-        if: always()
-        uses: appleboy/discord-action@master
-        with:
-          color: "#48f442"
-          webhook_id: '${{ secrets.WEBHOOK_ID }}'
-          webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
-          message: CI of branch ${{ steps.get_branch.outputs.branch }} executed ${{ job.status }}.
+      # - name: Notify CI process
+      #   if: always()
+      #   uses: appleboy/discord-action@master
+      #   with:
+      #     color: "#48f442"
+      #     webhook_id: '${{ secrets.WEBHOOK_ID }}'
+      #     webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
+      #     message: CI of branch ${{ steps.get_branch.outputs.branch }} executed ${{ job.status }}.
           
