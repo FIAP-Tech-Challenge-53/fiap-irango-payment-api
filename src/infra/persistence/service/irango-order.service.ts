@@ -10,7 +10,7 @@ export default class IRangoOrderService implements IOrderService {
   constructor (
   ) {}
 
-  async confirmPayment(pedidoId: number): Promise<void> {
+  async confirmPayment (pedidoId: number): Promise<void> {
     console.log(`Confirm payment for pedido ${pedidoId} at IRango Order Service`)
 
     const url = `${envs.SERVICE_IRANGO_ORDER_API}/v1/pedidos/payment-webhook/confirm/${pedidoId}`

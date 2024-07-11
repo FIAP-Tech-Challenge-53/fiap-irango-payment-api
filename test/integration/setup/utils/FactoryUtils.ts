@@ -5,8 +5,8 @@ import { Injectable } from '@nestjs/common'
 import { fakerPT_BR as faker } from '@faker-js/faker'
 import { DataSource, ObjectLiteral, Repository } from 'typeorm'
 
-import { Pedido } from '@/infra/persistence/typeorm/entities/pedido'
 import Pagamento from '@/core/domain/entities/pagamento'
+import { Pedido } from '@/infra/persistence/typeorm/entities/pedido'
 
 type IConstructable<T> = new () => T
 
@@ -80,7 +80,6 @@ export default class FactoryUtils {
       .sequence('pagamentoId', async () => faker.string.uuid())
       .sequence('createdAt', () => new Date())
       .sequence('updatedAt', () => new Date())
-
   }
 
   pagamento = async (data?: Partial<Pagamento>) => {
