@@ -45,6 +45,7 @@ make setup
 
 docker network create -d bridge local-network
 cp .env.example .env
+cp .env.local.test.example .env.test
 docker compose build --progress=plain
 docker compose up
 docker compose exec -it service-irango-payment-api npm run migration:run

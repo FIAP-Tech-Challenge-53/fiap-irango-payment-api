@@ -2,7 +2,6 @@
 
 import { INestApplication, ValidationPipe } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
-import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { agent } from 'supertest'
 
@@ -10,7 +9,6 @@ import AllExceptionFilter from '@/core/helpers/AllExceptionFilter'
 import ResponseTransformInterceptor from '@/core/helpers/ResponseTransformInterceptor'
 import AppModule, { appModules } from '@/infra/web/nestjs/app.module'
 
-import TypeOrmTestConfig from '@/test/integration/setup/database/TypeOrmTestConfig'
 import FactoryUtils from '@/test/integration/setup/utils/FactoryUtils'
 import { ServerUtils } from '@/test/integration/setup/utils/ServerUtils'
 import { TestDatabaseUtils } from '@/test/integration/setup/utils/TestDatabaseUtils'
@@ -26,8 +24,6 @@ export interface ITestSetup {
 const buildNestApp = async () => {
   const module = await Test.createTestingModule({
     imports: [
-      TypeOrmModule.forRoot(TypeOrmTestConfig),
-
       ...appModules,
       AppModule,
     ],
