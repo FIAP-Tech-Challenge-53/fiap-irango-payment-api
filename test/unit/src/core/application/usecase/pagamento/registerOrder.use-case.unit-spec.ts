@@ -1,116 +1,112 @@
+import RegisterOrder from '@/core/application/usecase/pagamento/registerOrder.use-case'
 import Pagamento from '@/core/domain/entities/pagamento'
 import Pedido from '@/core/domain/entities/pedido'
 import { PagamentoStatusEnum } from '@/core/domain/enums/pagamento-status.enum'
+import IPagamentoRepository from '@/core/domain/repositories/ipagamento.repository'
+import IPedidoRepository from '@/core/domain/repositories/ipedido.repository'
+import IGatewayPagamentoService from '@/core/domain/services/igateway-pagamento.service'
 import { PagamentoGateway } from '@/core/operation/gateway/pagamento.gateway'
 import { PedidoGateway } from '@/core/operation/gateway/pedido.gateway'
-import IPedidoRepository from '@/core/domain/repositories/ipedido.repository'
-import IPagamentoRepository from '@/core/domain/repositories/ipagamento.repository'
-import IGatewayPagamentoService from '@/core/domain/services/igateway-pagamento.service'
 import RegisterPedidoRequest from '@/infra/web/nestjs/pedidos/dto/register-pedido.request'
-import RegisterOrder from '@/core/application/usecase/pagamento/registerOrder.use-case'
 
-describe("test RegisterOrder class", () => {
+describe('test RegisterOrder class', () => {
+  let usecase:RegisterOrder
 
-    let usecase:RegisterOrder;
+  let mockPedidoGateway:PedidoGateway
+  let mockPagamentoGateway:PagamentoGateway
 
-    let mockPedidoGateway:PedidoGateway;
-    let mockPagamentoGateway:PagamentoGateway;
+  let mockPedidoRepository:jest.Mocked<IPedidoRepository>
+  let mockPagamentoRepository:jest.Mocked<IPagamentoRepository>
+  let mockPagamentoService:jest.Mocked<IGatewayPagamentoService>
 
-    let mockPedidoRepository:jest.Mocked<IPedidoRepository>;
-    let mockPagamentoRepository:jest.Mocked<IPagamentoRepository>;
-    let mockPagamentoService:jest.Mocked<IGatewayPagamentoService>;
+  let mockCreatePedido:jest.Mock<any>
+  let mockSavePedido:jest.Mock<any>
 
-    let mockCreatePedido:jest.Mock<any>;
-    let mockSavePedido:jest.Mock<any>;
+  let mockCreatePagamento:jest.Mock<any>
+  let mockRegisterOrderPagamento:jest.Mock<any>
+  let mockFindByPedidoIdPagamento:jest.Mock<any>
+  let mockSavePagamento:jest.Mock<any>
 
-    let mockCreatePagamento:jest.Mock<any>;
-    let mockRegisterOrderPagamento:jest.Mock<any>;
-    let mockFindByPedidoIdPagamento:jest.Mock<any>;
-    let mockSavePagamento:jest.Mock<any>;
+  beforeEach(() => {
+    jest.mock('@/core/operation/gateway/pagamento.gateway')
+    jest.mock('@/core/operation/gateway/pedido.gateway')
 
-    beforeEach(() => {
-        jest.mock('@/core/operation/gateway/pagamento.gateway')
-        jest.mock('@/core/operation/gateway/pedido.gateway')
-    
-        mockCreatePedido = jest.fn()
-        mockSavePedido = jest.fn()
+    mockCreatePedido = jest.fn()
+    mockSavePedido = jest.fn()
 
-        mockCreatePagamento = jest.fn()
-        mockRegisterOrderPagamento = jest.fn()
-        mockFindByPedidoIdPagamento = jest.fn()
-        mockSavePagamento = jest.fn()
-    
-        PedidoGateway.prototype.create = mockCreatePedido
-        PedidoGateway.prototype.save = mockSavePedido
+    mockCreatePagamento = jest.fn()
+    mockRegisterOrderPagamento = jest.fn()
+    mockFindByPedidoIdPagamento = jest.fn()
+    mockSavePagamento = jest.fn()
 
-        PagamentoGateway.prototype.create = mockCreatePagamento;
-        PagamentoGateway.prototype.findByPedidoId = mockFindByPedidoIdPagamento;
-        PagamentoGateway.prototype.registerOrder = mockRegisterOrderPagamento
-        PagamentoGateway.prototype.save = mockSavePagamento;
-    
-        mockPedidoRepository = {
-            create: jest.fn(),
-            save: jest.fn()
-        };
+    PedidoGateway.prototype.create = mockCreatePedido
+    PedidoGateway.prototype.save = mockSavePedido
 
-        mockPagamentoRepository = {
-            findByPedidoId: jest.fn(),
-            create: jest.fn(),
-            save: jest.fn()
-        };
+    PagamentoGateway.prototype.create = mockCreatePagamento
+    PagamentoGateway.prototype.findByPedidoId = mockFindByPedidoIdPagamento
+    PagamentoGateway.prototype.registerOrder = mockRegisterOrderPagamento
+    PagamentoGateway.prototype.save = mockSavePagamento
 
-        mockPagamentoService = {
-            registerOrder: jest.fn()
-        };
+    mockPedidoRepository = {
+      create: jest.fn(),
+      save: jest.fn()
+    }
 
-        mockPedidoGateway = new PedidoGateway(mockPedidoRepository);
-        mockPagamentoGateway = new PagamentoGateway(mockPagamentoRepository, mockPagamentoService);
-        usecase = new RegisterOrder(mockPedidoGateway, mockPagamentoGateway);
+    mockPagamentoRepository = {
+      findByPedidoId: jest.fn(),
+      create: jest.fn(),
+      save: jest.fn()
+    }
 
-    });
+    mockPagamentoService = {
+      registerOrder: jest.fn()
+    }
 
-    it("test class constructor", async () => {
-        expect(usecase).toBeInstanceOf(RegisterOrder);
-    });
+    mockPedidoGateway = new PedidoGateway(mockPedidoRepository)
+    mockPagamentoGateway = new PagamentoGateway(mockPagamentoRepository, mockPagamentoService)
+    usecase = new RegisterOrder(mockPedidoGateway, mockPagamentoGateway)
+  })
 
-    it("test class handle method", async () => {
+  it('test class constructor', async () => {
+    expect(usecase).toBeInstanceOf(RegisterOrder)
+  })
 
-        let input = new RegisterPedidoRequest();
+  it('test class handle method', async () => {
+    const input = new RegisterPedidoRequest()
 
-        const { id, consumidorId, total, createdAt, updatedAt } = input;
+    const { id, consumidorId, total, createdAt, updatedAt } = input
 
-        let pedido = Pedido.create(
-            id,
-            consumidorId,
-            total,
-            createdAt,
-            updatedAt,
-        );
+    const pedido = Pedido.create(
+      id,
+      consumidorId,
+      total,
+      createdAt,
+      updatedAt,
+    )
 
-        let pagamento = Pagamento.create(
-            pedido.id,
-            pedido.total,
-            "1",
-            PagamentoStatusEnum.PENDENTE,
-        );
+    const pagamento = Pagamento.create(
+      pedido.id,
+      pedido.total,
+      '1',
+      PagamentoStatusEnum.PENDENTE,
+    )
 
-        mockCreatePedido.mockResolvedValue(pedido);
-        mockRegisterOrderPagamento.mockResolvedValue("1");
-        mockCreatePagamento.mockResolvedValue(pagamento);
+    mockCreatePedido.mockResolvedValue(pedido)
+    mockRegisterOrderPagamento.mockResolvedValue('1')
+    mockCreatePagamento.mockResolvedValue(pagamento)
 
-        await usecase.handle(input);
+    await usecase.handle(input)
 
-        expect(mockCreatePedido).toHaveBeenCalledTimes(1)
-        expect(mockRegisterOrderPagamento).toHaveBeenCalledTimes(1)
-        expect(mockCreatePagamento).toHaveBeenCalledTimes(1)
-        expect(mockSavePedido).toHaveBeenCalledTimes(1)
-    
-        pedido.pagamentoId = undefined;
+    expect(mockCreatePedido).toHaveBeenCalledTimes(1)
+    expect(mockRegisterOrderPagamento).toHaveBeenCalledTimes(1)
+    expect(mockCreatePagamento).toHaveBeenCalledTimes(1)
+    expect(mockSavePedido).toHaveBeenCalledTimes(1)
 
-        expect(mockCreatePedido).toHaveBeenCalledWith(pedido)
-        expect(mockRegisterOrderPagamento).toHaveBeenCalledWith(pedido)
-        pedido.pagamentoId = pagamento.id;
-        expect(mockSavePedido).toHaveBeenCalledWith(pedido)
+    pedido.pagamentoId = undefined
 
-    });
-});
+    expect(mockCreatePedido).toHaveBeenCalledWith(pedido)
+    expect(mockRegisterOrderPagamento).toHaveBeenCalledWith(pedido)
+    pedido.pagamentoId = pagamento.id
+    expect(mockSavePedido).toHaveBeenCalledWith(pedido)
+  })
+})

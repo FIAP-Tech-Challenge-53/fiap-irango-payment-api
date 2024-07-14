@@ -4,66 +4,63 @@ import IPagamentoRepository from '@/core/domain/repositories/ipagamento.reposito
 import IGatewayPagamentoService from '@/core/domain/services/igateway-pagamento.service'
 import { PagamentoGateway } from '@/core/operation/gateway/pagamento.gateway'
 
-describe("Test PagamentoGateway class", () => {
+describe('Test PagamentoGateway class', () => {
+  let gateway:PagamentoGateway
 
-    let gateway:PagamentoGateway;
+  let mockPagamentoRepository:jest.Mocked<IPagamentoRepository>
+  let mockPagamentoService:jest.Mocked<IGatewayPagamentoService>
 
-    let mockPagamentoRepository:jest.Mocked<IPagamentoRepository>;
-    let mockPagamentoService:jest.Mocked<IGatewayPagamentoService>;
+  beforeEach(() => {
+    mockPagamentoRepository = {
+      findByPedidoId: jest.fn(),
+      create: jest.fn(),
+      save: jest.fn()
+    }
 
-    beforeEach(() => {   
+    mockPagamentoService = {
+      registerOrder: jest.fn()
+    }
 
-        mockPagamentoRepository = {
-            findByPedidoId: jest.fn(),
-            create: jest.fn(),
-            save: jest.fn()
-        };
+    gateway = new PagamentoGateway(mockPagamentoRepository, mockPagamentoService)
+  })
 
-        mockPagamentoService = {
-            registerOrder: jest.fn()
-        };
+  it('constructor class test', async () => {
+    expect(gateway).toBeInstanceOf(PagamentoGateway)
+  })
 
-        gateway = new PagamentoGateway(mockPagamentoRepository, mockPagamentoService );
-    });
+  it('create method test', async () => {
+    const pagamento = new Pagamento()
+    mockPagamentoRepository.create.mockResolvedValue(pagamento)
+    const result = await gateway.create(pagamento)
+    expect(mockPagamentoRepository.create).toHaveBeenCalledTimes(1)
+    expect(mockPagamentoRepository.create).toHaveBeenCalledWith(pagamento)
+    expect(result).toEqual(pagamento)
+  })
 
-    it("constructor class test", async () => {
-        expect(gateway).toBeInstanceOf(PagamentoGateway);
-    });
+  it('registerOrder method test', async () => {
+    const pedido = new Pedido()
+    mockPagamentoService.registerOrder.mockResolvedValue('test')
+    const result = await gateway.registerOrder(pedido)
+    expect(mockPagamentoService.registerOrder).toHaveBeenCalledTimes(1)
+    expect(mockPagamentoService.registerOrder).toHaveBeenCalledWith(pedido)
+    expect(result).toEqual('test')
+  })
 
-    it("create method test", async () => {
-        const pagamento = new Pagamento();
-        mockPagamentoRepository.create.mockResolvedValue(pagamento);
-        let result = await gateway.create(pagamento);
-        expect(mockPagamentoRepository.create).toHaveBeenCalledTimes(1)
-        expect(mockPagamentoRepository.create).toHaveBeenCalledWith(pagamento)
-        expect(result).toEqual(pagamento)
-    });
+  it('findByPedidoId method test', async () => {
+    const pagamento = new Pagamento()
+    mockPagamentoRepository.findByPedidoId.mockResolvedValue(pagamento)
+    const result = await gateway.findByPedidoId(1)
+    expect(mockPagamentoRepository.findByPedidoId).toHaveBeenCalledTimes(1)
+    expect(mockPagamentoRepository.findByPedidoId).toHaveBeenCalledWith(1)
+    expect(result).toEqual(pagamento)
+  })
 
-    it("registerOrder method test", async () => {
-        const pedido = new Pedido();
-        mockPagamentoService.registerOrder.mockResolvedValue("test");
-        let result = await gateway.registerOrder(pedido);
-        expect(mockPagamentoService.registerOrder).toHaveBeenCalledTimes(1)
-        expect(mockPagamentoService.registerOrder).toHaveBeenCalledWith(pedido)
-        expect(result).toEqual("test")
-    });
-
-    it("findByPedidoId method test", async () => {
-        const pagamento = new Pagamento();
-        mockPagamentoRepository.findByPedidoId.mockResolvedValue(pagamento);
-        let result = await gateway.findByPedidoId(1);
-        expect(mockPagamentoRepository.findByPedidoId).toHaveBeenCalledTimes(1)
-        expect(mockPagamentoRepository.findByPedidoId).toHaveBeenCalledWith(1)
-        expect(result).toEqual(pagamento)
-    });
-
-    it("save method test", async () => {
-        const pagamento = new Pagamento();
-        mockPagamentoRepository.save.mockResolvedValue(pagamento);
-        let result = await gateway.save(pagamento);
-        expect(mockPagamentoRepository.save).toHaveBeenCalledTimes(1)
-        expect(mockPagamentoRepository.save).toHaveBeenCalledWith(pagamento)
-        expect(result).toEqual(pagamento)
-    });
-
-});
+  it('save method test', async () => {
+    const pagamento = new Pagamento()
+    mockPagamentoRepository.save.mockResolvedValue(pagamento)
+    const result = await gateway.save(pagamento)
+    expect(mockPagamentoRepository.save).toHaveBeenCalledTimes(1)
+    expect(mockPagamentoRepository.save).toHaveBeenCalledWith(pagamento)
+    expect(result).toEqual(pagamento)
+  })
+})
