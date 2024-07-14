@@ -98,6 +98,18 @@ describe("PagamentoTypeormRepository class test", () => {
         expect(result).toEqual(pagamento);
     });
 
+    it("findByPedidoId method test when pedido is not found", async () => {
+
+        repository.findOne.mockResolvedValue(null);
+
+        let result = await pagamentoTypeormRepository.findByPedidoId(1);
+
+        expect(toDomainEntity).toHaveBeenCalledTimes(0);
+        expect(repository.findOne).toHaveBeenCalledTimes(1);
+        expect(repository.findOne).toHaveBeenCalledWith({ where: { pedidoId: 1 } });
+        expect(result).toEqual(undefined);
+    });
+
     it("save method test", async () => {
         let dto:PagamentoDto = {
             id: '1',

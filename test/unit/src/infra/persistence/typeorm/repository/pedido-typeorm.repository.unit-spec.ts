@@ -92,7 +92,7 @@ describe("PedidoTypeormRepository class tests", () => {
         toDomainEntity.mockReturnValue(pedido);
         repository.save.mockResolvedValue(entity);
 
-        let result = await pedidoTypeormRepository.create(pedido);
+        let result = await pedidoTypeormRepository.save(pedido);
         expect(mockToDto).toHaveBeenCalledTimes(1);
         expect(toDomainEntity).toHaveBeenCalledTimes(1);
         expect(repository.save).toHaveBeenCalledTimes(1);
