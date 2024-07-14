@@ -4,7 +4,7 @@ NETWORK_NAME=local-network
 NETWORK_ID=$(shell docker network ls -qf "name=${NETWORK_NAME}")
 
 CONTAINER_MYSQL = local-mysql
-CONTAINER_BACKEND = service-irango-payment-api
+CONTAINER_BACKEND = irango-payment-api
 
 DATABASE = irango_payment
 

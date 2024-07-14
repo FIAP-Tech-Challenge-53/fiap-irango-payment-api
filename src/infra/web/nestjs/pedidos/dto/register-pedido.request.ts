@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger'
 
 export default class RegisterPedidoRequest {
   @ApiProperty({
-    example: 12345,
+    example: 1,
     description: 'ID do Pedido',
     type: Number,
     required: true,

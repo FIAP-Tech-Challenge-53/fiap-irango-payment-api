@@ -1,7 +1,7 @@
 version: '2.2'
 services:
-  service-irango-payment-api:
-    container_name: service-irango-payment-api
+  irango-payment-api:
+    container_name: irango-payment-api
     cpus: 2
     mem_limit: 2000m
     environment:
