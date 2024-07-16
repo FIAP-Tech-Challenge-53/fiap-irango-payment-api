@@ -11,13 +11,11 @@
 ![editorconfig](https://shields.io/badge/EditorConfig-000000?logo=EditorConfig&logoColor=FFF&style=flat-square)
 ![typeorm](https://shields.io/badge/TypeORM-F37626?logo=TypeORM&logoColor=FFF&style=flat-square)
 
-This project involves the development of an API for a fast food self-service system, proposed as a Tech Challenge for the Software Architecture Postgraduate Course at FIAP.
+This project is a part of a fast food self-service system, proposed as a Tech Challenge for the Software Architecture Postgraduate Course at FIAP.
 
 For this project, we utilized the [TypeScript](https://www.typescriptlang.org/) programming language with [Node.js](https://nodejs.org/) and the [Nest.js](https://nestjs.com/) framework. The database management includes [MySQL 5.7](https://www.mysql.com/) to handle information related to Pagamento.
 
 To build the API documentation, we've used [Swagger](https://swagger.io/) tool integrated with Nest.js, accessible through the endpoint: {irango_host}/docs
-
-## [DDD - Domain Driven Design Diagrams](./docs/domain-driven-design.md)
 
 ## Workspace Dependencies
 - [Node 20.10](https://nodejs.org/)
@@ -35,6 +33,10 @@ Install project dependencies with:
 ```bash
 npm run install
 ```
+
+* Create a MongoDB database or start [fiap-irango-database/docker-compose.yml](https://github.com/FIAP-Tech-Challenge-53/fiap-irango-database/blob/main/docker-compose.yml) file.
+
+* Start [fiap-irango-order-api](https://github.com/FIAP-Tech-Challenge-53/fiap-irango-order-api) service. It can be run after fiap-irango-payment-api starts.
 
 ## Start Project using Docker
 Configure all docker containers and volumes and start the application
@@ -74,34 +76,16 @@ npm run seed:run
 We developed a seed to populate database with some products and one Consumidor with CPF `123.456.789-00`. You can use it or create a new Consumidor.
 
 ## Endpoints
-We developed few endpoints which can be found in [consumidores.controller.ts](./src/adapter/driver/nestjs/consumidores/consumidores.controller.ts), [produtos.controller.ts](./src/adapter/driver/nestjs/produtos/produtos.controller.ts) and [pedidos.controller.ts](./src/adapter/driver/nestjs/pedidos/pedidos.controller.ts) files
+We developed few endpoints which can be found in [pagamentos.controller.ts](./src/infra/web/nestjs/pagamentos/pagamentos.controller.ts), [pedidos.controller.ts](./src/infra/web/nestjs/pedidos/pedidos.controller.ts) files.
 
 ## Business Requirements:
-1. Cadastro do Cliente
-> POST {irango_host}/v1/consumidores
-2. Identificação do Cliente via CPF
-> GET {irango_host}/v1/consumidores/cpf
-3. Criar, editar e remover de produto
-> POST {irango_host}/v1/produtos
-
-> PUT {irango_host}/v1/produtos/:id
-
-> DELETE {irango_host}/v1/produtos/:id
-4. Buscar produtos por categoria
-> GET {irango_host}/v1/produtos/categorias/:termo
-5. Checkout
-> POST {irango_host}/v1/pedidos
-6. Verificar status do Pedido
-> GET {irango_host}/v1/pedidos/:id
-7. Atualizar status do pedido
-> PUT {irango_host}/v1/produtos/:id
-8. Webhook de Pagamento (Mercado Pago)
-> POST {irango_host}/v1/pedidos/pagamento-webhook/mercado-pago
-9. Listar os pedidos
-> GET {irango_host}/v1/pedidos
+1. Registrar novo pedido
+> POST {irango_payment_host}/v1/pedidos/register
+2. Webhook de Pagamento (Mercado Pago)
+> POST {irango_payment_host}/v1/pagamentos/webhook/mercado-pago
 
 ## Automated Tests
-### Run all tests
+### Unit Tests
 ```bash
 npm run test
 ```
@@ -109,6 +93,11 @@ npm run test
 ### Test Coverage
 ```bash
 npm run test:coverage
+```
+
+### Integration Tests
+```bash
+npm run test:integration
 ```
 
 <img src="./docs/test_suite.png" alt="Test Suite Coverage" width="900" />
