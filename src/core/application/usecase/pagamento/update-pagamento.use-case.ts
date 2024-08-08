@@ -25,7 +25,7 @@ export default class UpdatePagamento {
     Pagamento.update(pagamento, PagamentoStatusEnum.CONFIRMADO)
     await this.gateway.save(pagamento)
 
-    await this.orderService.confirmPayment(pedidoId)
+    await this.orderService.confirmPayment(pagamento)
 
     return pagamento
   }

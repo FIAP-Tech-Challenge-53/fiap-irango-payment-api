@@ -3,12 +3,14 @@ import Pedido from '@/core/domain/entities/pedido'
 import { PagamentoStatusEnum } from '@/core/domain/enums/pagamento-status.enum'
 import { PagamentoGateway } from '@/core/operation/gateway/pagamento.gateway'
 import { PedidoGateway } from '@/core/operation/gateway/pedido.gateway'
+import IRangoOrderService from '@/infra/persistence/service/irango-order.service'
 import RegisterPedidoRequest from '@/infra/web/nestjs/pedidos/dto/register-pedido.request'
 
 export default class RegisterOrder {
   constructor (
     private readonly pedidoGateway: PedidoGateway,
     private readonly pagamentoGateway: PagamentoGateway,
+    private readonly orderService: IRangoOrderService,
   ) {}
 
   async handle (input: RegisterPedidoRequest): Promise<Pagamento> {
@@ -38,6 +40,9 @@ export default class RegisterOrder {
     pedido.pagamentoId = pagamento.id
 
     await this.pedidoGateway.save(pedido)
+
+    await this.orderService.confirmPayment(pagamento)
+
     return pagamento
   }
 }
