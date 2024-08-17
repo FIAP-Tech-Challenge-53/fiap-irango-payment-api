@@ -107,9 +107,13 @@ npm run test:integration
 ### Geração de Pagamento Vulnerabilities Report
 - [Not Sanatized](https://fiap-tech-challenge-53.github.io/fiap-irango-payment-api/owasp-reports/vulnerabilities/gerar-pagamento/2024-08-17-ZAP-Report-.html)
 
+- [Sanatized with False Positive](https://fiap-tech-challenge-53.github.io/fiap-irango-payment-api/owasp-reports/sanatized/gerar-pagamento/2024-08-17-ZAP-Report-.html)
+
 ### Confirmação de Pagamento Vulnerabilities Report
 
 - [Not Sanatized](https://fiap-tech-challenge-53.github.io/fiap-irango-payment-api/owasp-reports/vulnerabilities/webhook/2024-08-17-ZAP-Report-.html)
+
+- [Sanatized with False Positive](https://fiap-tech-challenge-53.github.io/fiap-irango-payment-api/owasp-reports/sanatized/webhook/2024-08-17-ZAP-Report-.html)
 
 
 ## Make commands
