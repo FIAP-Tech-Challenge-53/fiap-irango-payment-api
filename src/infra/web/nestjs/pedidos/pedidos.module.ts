@@ -5,6 +5,7 @@ import { IPedidoRepository } from '@/core/domain/repositories/ipedido.repository
 import { Pedido } from '@/infra/persistence/typeorm/entities/pedido'
 import PedidoTypeormRepository from '@/infra/persistence/typeorm/repository/pedido-typeorm.repository'
 import PagamentosModule from '@/infra/web/nestjs/pagamentos/pagamentos.module'
+import { CreatedOrderHandler } from '@/infra/queue/handles/created-order.handles'
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import PagamentosModule from '@/infra/web/nestjs/pagamentos/pagamentos.module'
   ],
   providers: [
     { provide: IPedidoRepository, useClass: PedidoTypeormRepository },
+    CreatedOrderHandler,
   ],
   controllers: [
   ],

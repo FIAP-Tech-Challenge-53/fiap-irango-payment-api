@@ -67,4 +67,12 @@ export class Environment {
   static get SNS_TOPIC_PAYMENT_CONFIRMED () {
     return process.env.SNS_TOPIC_PAYMENT_CONFIRMED || 'arn:aws:sns:us-east-1:000000000000:fiap-irango-payment_payment-confirmed_dev'
   }
+
+  static get CREATED_ORDER_QUEUE() {
+    return process.env.CREATED_ORDER_QUEUE || 'fiap-irango-payment_order-created_dev'
+  }
+
+  static get URL_QUEUE() {
+    return process.env.URL_QUEUE || 'http://localhost:4566/000000000000/'
+  }
 }
