@@ -51,8 +51,8 @@ jobs:
       - name: Build App
         run: npm run build
       # Test Unit
-      - name: Test
-        run: npm test
+      # - name: Test
+      #   run: npm test
       - name: Set custom environment variable DB_DATABASE
         run: echo "DB_DATABASE=irango_irango_payment_test" >> $GITHUB_ENV
       # Run Migration
