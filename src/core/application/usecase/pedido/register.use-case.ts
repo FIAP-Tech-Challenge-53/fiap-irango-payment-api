@@ -12,7 +12,7 @@ export default class Register {
   ) {}
 
   async handle (input: RegisterPedidoRequest): Promise<Pedido> {
-    console.log(`Register new order with id ${input.id}`)
+    console.log(`Register new Order with id ${input.id}`)
 
     let pedido = Pedido.create(
       input.id,

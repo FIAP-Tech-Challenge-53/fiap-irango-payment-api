@@ -1,6 +1,9 @@
 import { Global, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
+import { SqsModule } from '@ssut/nestjs-sqs'
+
+import QueueConfig from '@/config/QueueConfig'
 import TypeOrmConfig from '@/config/typeorm/TypeOrmConfig'
 import AppController from '@/infra/web/nestjs/app.controller'
 import PagamentosModule from '@/infra/web/nestjs/pagamentos/pagamentos.module'
@@ -15,6 +18,7 @@ export const appModules = [
 @Module({
   imports: [
     TypeOrmModule.forRoot(TypeOrmConfig),
+    SqsModule.register(QueueConfig),
     ...appModules
   ],
   controllers: [

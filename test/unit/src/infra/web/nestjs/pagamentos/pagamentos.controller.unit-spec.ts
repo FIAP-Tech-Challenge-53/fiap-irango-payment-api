@@ -30,6 +30,7 @@ describe('PagamentosController class tests', () => {
     }
 
     mockOrderService = {
+      createPayment: jest.fn(),
       confirmPayment: jest.fn()
     }
 

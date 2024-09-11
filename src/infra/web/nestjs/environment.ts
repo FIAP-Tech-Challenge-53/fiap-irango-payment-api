@@ -48,7 +48,31 @@ export class Environment {
     return Number(process.env.DB_CONNECTION_TIMEOUT) || 30000
   }
 
-  static get SERVICE_IRANGO_ORDER_API () {
-    return process.env.SERVICE_IRANGO_ORDER_API || 'http://localhost:3001'
+  static get AWS_REGION () {
+    return process.env.AWS_REGION || 'us-east-1'
+  }
+
+  static get AWS_ACCESS_KEY_ID () {
+    return process.env.AWS_ACCESS_KEY_ID || 'qualquercoisa'
+  }
+
+  static get AWS_SECRET_ACCESS_KEY () {
+    return process.env.AWS_SECRET_ACCESS_KEY || 'qualquercoisa'
+  }
+
+  static get SNS_TOPIC_PAYMENT_CREATED () {
+    return process.env.SNS_TOPIC_PAYMENT_CREATED || 'arn:aws:sns:us-east-1:000000000000:fiap-irango-payment_payment-created_dev'
+  }
+
+  static get SNS_TOPIC_PAYMENT_CONFIRMED () {
+    return process.env.SNS_TOPIC_PAYMENT_CONFIRMED || 'arn:aws:sns:us-east-1:000000000000:fiap-irango-payment_payment-confirmed_dev'
+  }
+
+  static get CREATED_ORDER_QUEUE () {
+    return process.env.CREATED_ORDER_QUEUE || 'fiap-irango-payment_order-created_dev'
+  }
+
+  static get URL_QUEUE () {
+    return process.env.URL_QUEUE || 'http://localstack:4566/000000000000/'
   }
 }
