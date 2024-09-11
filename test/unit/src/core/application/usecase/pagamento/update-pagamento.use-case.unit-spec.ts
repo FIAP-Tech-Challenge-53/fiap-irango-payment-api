@@ -45,6 +45,7 @@ describe('Test UpdatePagamento Class', () => {
     }
 
     mockOrderService = {
+      createPayment: jest.fn(),
       confirmPayment: jest.fn()
     }
 
@@ -97,7 +98,7 @@ describe('Test UpdatePagamento Class', () => {
 
     expect(mockFindByPedidoIdPagamento).toHaveBeenCalledWith(1)
     expect(mockSavePagamento).toHaveBeenCalledWith(pagamento)
-    expect(mockOrderService.confirmPayment).toHaveBeenCalledWith(1)
+    expect(mockOrderService.confirmPayment).toHaveBeenCalledWith(pagamento)
 
     expect(result).toEqual(pagamento)
   })

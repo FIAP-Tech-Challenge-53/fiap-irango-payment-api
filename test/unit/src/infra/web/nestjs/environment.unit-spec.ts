@@ -116,13 +116,53 @@ describe('Test for static methods of Environment class', () => {
     expect(Environment.DB_CONNECTION_TIMEOUT).toEqual(30000)
   })
 
-  it('test get SERVICE_IRANGO_ORDER_API method', () => {
-    process.env.SERVICE_IRANGO_ORDER_API = 'test'
-    expect(Environment.SERVICE_IRANGO_ORDER_API).toEqual('test')
+  it('test get AWS_REGION method', () => {
+    process.env.AWS_REGION = 'test'
+    expect(Environment.AWS_REGION).toEqual('test')
   })
 
-  it('test get SERVICE_IRANGO_ORDER_API method when SERVICE_IRANGO_ORDER_API is not defined', () => {
-    delete process.env.SERVICE_IRANGO_ORDER_API
-    expect(Environment.SERVICE_IRANGO_ORDER_API).toEqual('http://localhost:3001')
+  it('test get AWS_REGION method default value', () => {
+    delete process.env.AWS_REGION
+    expect(Environment.AWS_REGION).toEqual('us-east-1')
+  })
+
+  it('test get AWS_ACCESS_KEY_ID method', () => {
+    process.env.AWS_ACCESS_KEY_ID = 'test'
+    expect(Environment.AWS_ACCESS_KEY_ID).toEqual('test')
+  })
+
+  it('test get AWS_ACCESS_KEY_ID method default value', () => {
+    delete process.env.AWS_ACCESS_KEY_ID
+    expect(Environment.AWS_ACCESS_KEY_ID).toEqual('qualquercoisa')
+  })
+
+  it('test get AWS_SECRET_ACCESS_KEY method', () => {
+    process.env.AWS_SECRET_ACCESS_KEY = 'test'
+    expect(Environment.AWS_SECRET_ACCESS_KEY).toEqual('test')
+  })
+
+  it('test get AWS_SECRET_ACCESS_KEY method default value', () => {
+    delete process.env.AWS_SECRET_ACCESS_KEY
+    expect(Environment.AWS_SECRET_ACCESS_KEY).toEqual('qualquercoisa')
+  })
+
+  it('test get SNS_TOPIC_PAYMENT_CREATED method', () => {
+    process.env.SNS_TOPIC_PAYMENT_CREATED = 'test'
+    expect(Environment.SNS_TOPIC_PAYMENT_CREATED).toEqual('test')
+  })
+
+  it('test get SNS_TOPIC_PAYMENT_CREATED method default value', () => {
+    delete process.env.SNS_TOPIC_PAYMENT_CREATED
+    expect(Environment.SNS_TOPIC_PAYMENT_CREATED).toEqual('arn:aws:sns:us-east-1:000000000000:fiap-irango-payment_payment-created_dev')
+  })
+
+  it('test get SNS_TOPIC_PAYMENT_CONFIRMED method', () => {
+    process.env.SNS_TOPIC_PAYMENT_CONFIRMED = 'test'
+    expect(Environment.SNS_TOPIC_PAYMENT_CONFIRMED).toEqual('test')
+  })
+
+  it('test get SNS_TOPIC_PAYMENT_CONFIRMED method default value', () => {
+    delete process.env.SNS_TOPIC_PAYMENT_CONFIRMED
+    expect(Environment.SNS_TOPIC_PAYMENT_CONFIRMED).toEqual('arn:aws:sns:us-east-1:000000000000:fiap-irango-payment_payment-confirmed_dev')
   })
 })

@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common'
 
-import axios from 'axios'
+import { PublishCommand, SNSClient } from '@aws-sdk/client-sns'
 
+import AwsConfig from '@/config/AwsConfig'
+import Pagamento from '@/core/domain/entities/pagamento'
 import IOrderService from '@/core/domain/services/iorder.service'
 import { Environment as envs } from '@/infra/web/nestjs/environment'
 
@@ -10,15 +12,37 @@ export default class IRangoOrderService implements IOrderService {
   constructor (
   ) {}
 
-  async confirmPayment (pedidoId: number): Promise<void> {
-    console.log(`Confirm payment for pedido ${pedidoId} at IRango Order Service`)
+  async createPayment (pagamento: Pagamento): Promise<void> {
+    console.log(`Create payment for pedido ${pagamento.pedidoId} at IRango Order Service`)
 
-    const url = `${envs.SERVICE_IRANGO_ORDER_API}/v1/pedidos/payment-webhook/confirm/${pedidoId}`
     try {
-      await axios.post(url)
+      const client = new SNSClient(AwsConfig)
+      const command = new PublishCommand({
+        TopicArn: envs.SNS_TOPIC_PAYMENT_CREATED,
+        Message: JSON.stringify(pagamento)
+      })
+
+      await client.send(command)
     } catch (error) {
-      console.log(`Error: ${error}`)
-      console.log(error.response?.data)
+      console.error(`Error: ${error}`)
+      console.error(error)
+    }
+  }
+
+  async confirmPayment (pagamento: Pagamento): Promise<void> {
+    console.log(`Confirm payment for pedido ${pagamento.pedidoId} at IRango Order Service`)
+
+    try {
+      const client = new SNSClient(AwsConfig)
+      const command = new PublishCommand({
+        TopicArn: envs.SNS_TOPIC_PAYMENT_CONFIRMED,
+        Message: JSON.stringify(pagamento)
+      })
+
+      await client.send(command)
+    } catch (error) {
+      console.error(`Error: ${error}`)
+      console.error(error)
     }
   }
 }

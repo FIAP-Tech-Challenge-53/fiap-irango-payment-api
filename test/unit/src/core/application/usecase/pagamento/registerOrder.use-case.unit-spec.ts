@@ -5,6 +5,7 @@ import { PagamentoStatusEnum } from '@/core/domain/enums/pagamento-status.enum'
 import IPagamentoRepository from '@/core/domain/repositories/ipagamento.repository'
 import IPedidoRepository from '@/core/domain/repositories/ipedido.repository'
 import IGatewayPagamentoService from '@/core/domain/services/igateway-pagamento.service'
+import IOrderService from '@/core/domain/services/iorder.service'
 import { PagamentoGateway } from '@/core/operation/gateway/pagamento.gateway'
 import { PedidoGateway } from '@/core/operation/gateway/pedido.gateway'
 import RegisterPedidoRequest from '@/infra/web/nestjs/pedidos/dto/register-pedido.request'
@@ -14,6 +15,7 @@ describe('test RegisterOrder class', () => {
 
   let mockPedidoGateway:PedidoGateway
   let mockPagamentoGateway:PagamentoGateway
+  let mockOrderService:jest.Mocked<IOrderService>
 
   let mockPedidoRepository:jest.Mocked<IPedidoRepository>
   let mockPagamentoRepository:jest.Mocked<IPagamentoRepository>
@@ -62,9 +64,14 @@ describe('test RegisterOrder class', () => {
       registerOrder: jest.fn()
     }
 
+    mockOrderService = {
+      createPayment: jest.fn(),
+      confirmPayment: jest.fn()
+    }
+
     mockPedidoGateway = new PedidoGateway(mockPedidoRepository)
     mockPagamentoGateway = new PagamentoGateway(mockPagamentoRepository, mockPagamentoService)
-    usecase = new RegisterOrder(mockPedidoGateway, mockPagamentoGateway)
+    usecase = new RegisterOrder(mockPedidoGateway, mockPagamentoGateway, mockOrderService)
   })
 
   it('test class constructor', async () => {
