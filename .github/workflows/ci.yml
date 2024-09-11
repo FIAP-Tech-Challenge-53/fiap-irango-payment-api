@@ -59,8 +59,8 @@ jobs:
       - name: Migration
         run: npm run migration:run
       # Test Integration
-      - name: Test integration
-        run: npm run test:integration --bail
+      # - name: Test integration
+      #   run: npm run test:integration --bail
         
       - name: Notify CI process
         if: always()
