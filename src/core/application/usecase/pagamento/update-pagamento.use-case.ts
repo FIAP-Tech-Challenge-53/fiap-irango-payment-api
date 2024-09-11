@@ -11,7 +11,7 @@ export default class UpdatePagamento {
   ) {}
 
   async handle (pedidoId: number, paymentApproved: boolean): Promise<PagamentoDto> {
-    console.log(`Update payment with payment status ${paymentApproved} for pedido ${pedidoId}`)
+    console.log(`Update Payment with payment status ${paymentApproved} for Order ${pedidoId}`)
 
     const pagamento = await this.gateway.findByPedidoId(pedidoId)
     if (!pagamento) {

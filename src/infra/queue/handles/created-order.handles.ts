@@ -13,6 +13,9 @@ import IPedidoRepository, { IPedidoRepository as IPedidoRepositorySymbol } from 
 import IGatewayPagamentoService, {
   IGatewayPagamentoService as IGatewayPagamentoServiceSymbol,
 } from '@/core/domain/services/igateway-pagamento.service'
+import IOrderService, {
+  IOrderService as IOrderServiceSymbol,
+} from '@/core/domain/services/iorder.service'
 import { PedidoController } from '@/core/operation/controllers/pedido.controller'
 import { Environment } from '@/infra/web/nestjs/environment'
 
@@ -22,6 +25,7 @@ export class CreatedOrderHandler {
     @Inject(IPagamentoRepositorySymbol) private readonly repository: IPagamentoRepository,
     @Inject(IPedidoRepositorySymbol) private readonly orderRepository: IPedidoRepository,
     @Inject(IGatewayPagamentoServiceSymbol) private readonly gatewayPagamentoService: IGatewayPagamentoService,
+    @Inject(IOrderServiceSymbol) private readonly orderService: IOrderService,
   ) { }
 
   @SqsMessageHandler(/** name: */ Environment.CREATED_ORDER_QUEUE, /** batch: */ false)
@@ -31,6 +35,7 @@ export class CreatedOrderHandler {
       this.orderRepository,
       this.repository,
       this.gatewayPagamentoService,
+      this.orderService,
     )
 
     const message2: any = JSON.parse(obj.Message ?? '')

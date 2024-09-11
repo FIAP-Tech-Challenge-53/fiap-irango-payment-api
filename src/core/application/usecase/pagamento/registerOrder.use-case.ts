@@ -13,8 +13,8 @@ export default class RegisterOrder {
     private readonly orderService: IRangoOrderService,
   ) {}
 
-  async handle (input: RegisterPedidoRequest): Promise<Pagamento> {
-    console.log(`Register new payment of order with id ${input.id}`)
+  async handle (input: RegisterPedidoRequest): Promise<Pedido> {
+    console.log(`Register new Payment of Order with id ${input.id}`)
 
     const { id, consumidorId, total, createdAt, updatedAt } = input
     let pedido = Pedido.create(
@@ -41,8 +41,8 @@ export default class RegisterOrder {
 
     await this.pedidoGateway.save(pedido)
 
-    await this.orderService.confirmPayment(pagamento)
+    await this.orderService.createPayment(pagamento)
 
-    return pagamento
+    return pedido
   }
 }
