@@ -40,8 +40,6 @@ export class CreatedOrderHandler {
 
     const message2: any = JSON.parse(obj.Message ?? '')
 
-    console.log('CreatedOrderHandler', message2)
-
     await controller.register(message2)
   }
 
